@@ -11,6 +11,8 @@ execute:
   warning: false # use this to make sure warnings don't show up
 ---
 
+[deployed htm url](https://iandeltredici.github.io/workshop-08_winter-2026/code/workshop-code.html)
+
 In this workshop, we will answer the question: How do specific leaf area, water treatment, and species influence plant mass?  
 
 **Specific leaf area** is a continuous variable measured in cm^2^/g.  
@@ -148,8 +150,17 @@ Label the axes with units where appropriate.
 
 Add a title describing the relationship (e.g. as SLA increases, total mass ______). 
 
-
-
+```{r}
+#| label: create sla & mass scatterplot
+#| message: false
+ggplot(data = drought_exp_clean, #create base layer using drought_exp_clean
+       aes(x= sla, #x axis is sla
+           y= total_g)) + #y axis is total_g
+  geom_point() + #create scatterplot
+  labs(title = "As SLA increases, total mass increases", #set plot title 
+       x = "Specific Leaf Area (cm\U00B2/g)", #set x axis title
+       y = "Total Mass (g)") #set y axis title
+```
 
 
 ## What are the differences in total mass between water treatments?
@@ -160,11 +171,23 @@ Label the axes with units where appropriate.
 
 Add a title describing the differences in (mean or median) plant mass between water treatments.
 
-
-
-
-
-
+```{r}
+#| label: create jitterplot between water treatments
+#| message: false
+ggplot(data = drought_exp_clean, #create new plot with drought_exp_clean data
+       aes(x = water_treatment, #set x axis 
+           y = total_g, #set y axis
+           color = water_treatment)) + #color by water treatment
+  geom_jitter(height = 0, #create jitter plot and restrict vertical jitter
+              width = 0.3) + #allow horizontal jitter
+  scale_color_manual(values = c("Well watered" = ww_col, #set color of treatments
+                                "Drought stressed" = ds_col)) +
+  labs(x = "Water Treatment", #set x axis title
+       y = "Total Mass (g)", #set y axis title
+       title = "Well watered plants show a higher mass") + #set plot title
+  theme(legend.position = "none", #remove legend
+        plot.title.position = "plot") #move plot title
+```
 
 ## What are the differences in total mass between species?
 
@@ -175,6 +198,30 @@ Label the axes with units where appropriate.
 Add a title describing the differences in (mean or median) plant mass between species.  
 
 Bonus: order the x-axis by decreasing mean plant mass _and_ wrap the long species names using the `label_wrap()` function from the `scales` package.
+
+```{r}
+#| label: jitterplot between species
+#| message: false
+ggplot(data = drought_exp_clean,
+       aes(x = reorder(species_name, - total_g),
+           y= total_g,
+           color = species_name)) +
+  geom_jitter(height = 0,
+              width = 0.3) +
+  labs(x = "Species name",
+       y = "Total mass (g)",
+       title = "Plant mass differs across species") +
+  scale_color_manual(values = c("Lotus scoparius" = lotsco_col,
+                                    "Penstemon centranthifolius" = pencen_col,
+                                    "Salvia leucophylla" = salleu_col,
+                                    "Encelia californica" = enccal_col,
+                                    "Stipa pulchra" = stipul_col,
+                                    "Eschscholzia californica" = esccal_col,
+                                    "Grindelia camporum" = gricam_col)) +
+  scale_x_discrete(labels = label_wrap(10)) +
+  theme(legend.position = "none") 
+```
+
 
 
 
