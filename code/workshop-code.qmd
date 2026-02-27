@@ -121,13 +121,21 @@ drought_exp_clean <- drought_exp |>
 ```
 
 Insert code to double check the structure of the data frame here.  
-
-
+```{r}
+#| label: check structure
+#| message: false
+# check structure
+str(drought_exp_clean)
+```
 
 Insert code to display 10 random rows from the data frame here.  
-
-
-
+```{r}
+#| label: display 10 rows
+#| message: false
+#display 10 random rows
+slice_sample(drought_exp_clean, 
+             n = 10)
+```
 
 
 # 3. Visualizing data
